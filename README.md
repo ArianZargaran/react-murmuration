@@ -146,6 +146,27 @@ field.setParams({ speed: 480 })
 field.destroy()
 ```
 
+## Running the studio
+
+The tuning studio in this repo is a separate app from the package.
+
+```bash
+npm run dev      # studio at localhost:5173
+npm test         # 21 tests, node:test, no extra dependencies
+npm run build    # static build into dist-app/
+```
+
+It has three routes — `/`, `/docs`, `/gallery` — so a static host must serve
+`index.html` for unknown paths or a direct hit on `/docs` returns a 404. The
+build writes a `404.html` alongside it, which is what GitHub Pages and most
+static hosts fall back to; Netlify and Vercel do this by default anyway.
+
+Served from a subpath, set the base so both the asset URLs and the routes agree:
+
+```bash
+BASE_PATH=/react-murmuration/ npm run build
+```
+
 ## Licence
 
 MIT

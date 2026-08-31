@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && cp dist-app/index.html dist-app/404.html",
     "build:lib": "vite build --config vite.lib.config.ts && tsc -p tsconfig.lib.json",
     "prepublishOnly": "npm run docs && npm run build:lib && npm test && npm run check:package",
     "preview": "vite preview",
