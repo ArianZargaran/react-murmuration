@@ -29,7 +29,9 @@ version is `0`, the public API may change between minor versions.
 
 ## [0.0.1] — 2026-08-31
 
-Initial release.
+Initial release. **Deprecated** on the registry in favour of `0.0.2`: this
+version does not export `Vec3`, so the `path` prop cannot be typed. The
+runtime is identical — the defect is types only.
 
 ### Added
 
