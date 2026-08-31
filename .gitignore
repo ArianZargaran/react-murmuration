@@ -5,3 +5,4 @@ dist-app
 tsconfig.tsbuildinfo
 .omc
 .claude
+testbuild
