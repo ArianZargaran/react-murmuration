@@ -1,0 +1,56 @@
+name: Deploy studio
+
+# The tuning studio, published to GitHub Pages. The npm package is released
+# separately by hand; this only ever builds and deploys the app.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time. A queued run is superseded rather than racing.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # A broken studio should not reach the site.
+      - run: npm test
+
+      # Pages serves a project site from /<repo>/, so both the asset URLs and
+      # the router's routes have to agree on that prefix. The build also writes
+      # 404.html, which is what Pages falls back to for /docs and /gallery.
+      - name: Build
+        run: BASE_PATH="/${GITHUB_REPOSITORY#*/}/" npm run build
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-app
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
